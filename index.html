@@ -1,0 +1,1613 @@
+<!DOCTYPE html>
+<html lang="hi" class="h-full bg-slate-50">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>धनखड़ सीएससी सेंटर ढाकला - वफादारी प्रमाण पत्र एवं ग्राहक प्रबंधन प्रणाली</title>
+
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <!-- Font Awesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+
+    <!-- html2canvas for HD Certificate Image Export -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+
+    <!-- Canvas Confetti -->
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.9.2/dist/confetti.browser.min.js"></script>
+
+    <!-- Google Fonts for Hindi & Aesthetics -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Hind:wght@400;500;600;700&family=Rozha+One&family=Teko:wght@500;600;700&display=swap" rel="stylesheet">
+
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        cscNavy: '#0A2540',
+                        cscSaffron: '#FF9933',
+                        cscGreen: '#00875A',
+                        cscTeal: '#00A896',
+                        diamondBlue: '#0284C7'
+                    },
+                    fontFamily: {
+                        hind: ['Hind', 'sans-serif'],
+                        rozha: ['Rozha One', 'serif'],
+                        teko: ['Teko', 'sans-serif']
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        body {
+            font-family: 'Hind', sans-serif;
+            background-color: #F8FAFC;
+        }
+
+        /* Certificate Watermark Pattern */
+        .csc-watermark {
+            background-image: url("data:image/svg+xml,%3Csvg width='140' height='140' viewBox='0 0 100 100' xmlns='http://www.w3.org/2000/svg'%3E%3Ctext x='50%25' y='50%25' font-size='9' font-family='sans-serif' font-weight='bold' fill='%230A2540' opacity='0.035' text-anchor='middle' dominant-baseline='middle'%3EDHANKHAR CSC DHAKLA%3C/text%3E%3C/svg%3E");
+        }
+
+        /* Tier Specific Certificate Borders */
+        .cert-border-Normal {
+            border: 12px solid #0A2540;
+            outline: 3px dashed #FF9933;
+            outline-offset: -8px;
+            background: linear-gradient(135deg, #FFFFFF 0%, #F1F5F9 100%);
+        }
+
+        .cert-border-Silver {
+            border: 14px solid #475569;
+            outline: 4px double #CBD5E1;
+            outline-offset: -10px;
+            background: linear-gradient(135deg, #F8FAFC 0%, #E2E8F0 50%, #F1F5F9 100%);
+            box-shadow: inset 0 0 35px rgba(71, 85, 105, 0.2);
+        }
+
+        .cert-border-Gold {
+            border: 14px solid #B45309;
+            outline: 4px double #F59E0B;
+            outline-offset: -10px;
+            background: linear-gradient(135deg, #FFFDF0 0%, #FEF3C7 50%, #FFFBEB 100%);
+            box-shadow: inset 0 0 40px rgba(217, 119, 6, 0.25);
+        }
+
+        .cert-border-Platinum {
+            border: 14px solid #0F172A;
+            outline: 4px double #38BDF8;
+            outline-offset: -10px;
+            background: linear-gradient(135deg, #F0F9FF 0%, #E0F2FE 50%, #F8FAFC 100%);
+            box-shadow: inset 0 0 45px rgba(14, 165, 233, 0.25);
+        }
+
+        .cert-border-Diamond {
+            border: 14px solid #0284C7;
+            outline: 5px double #38BDF8;
+            outline-offset: -10px;
+            background: linear-gradient(135deg, #F0F9FF 0%, #E0F2FE 40%, #E0F2FE 100%);
+            box-shadow: inset 0 0 50px rgba(2, 132, 199, 0.35);
+        }
+
+        /* Badge Visuals */
+        .badge-Normal { background: linear-gradient(135deg, #0A2540, #00875A); color: #FFFFFF; }
+        .badge-Silver { background: linear-gradient(135deg, #94A3B8, #475569, #CBD5E1); color: #FFFFFF; }
+        .badge-Gold { background: linear-gradient(135deg, #F59E0B, #B45309, #FDE68A); color: #78350F; }
+        .badge-Platinum { background: linear-gradient(135deg, #0EA5E9, #0F172A, #7DD3FC); color: #FFFFFF; }
+        .badge-Diamond { background: linear-gradient(135deg, #0284C7, #0369A1, #B9F2FF); color: #FFFFFF; }
+
+        @media print {
+            body * { visibility: hidden !important; }
+            #printableCertificateContainer, #printableCertificateContainer * { visibility: visible !important; }
+            #printableCertificateContainer {
+                position: absolute !important;
+                left: 0 !important;
+                top: 0 !important;
+                width: 100% !important;
+                margin: 0 !important;
+                padding: 0 !important;
+            }
+            .no-print { display: none !important; }
+        }
+
+        #wheelCanvas {
+            transition: transform 4s cubic-bezier(0.15, 0.99, 0.35, 1);
+        }
+    </style>
+</head>
+<body class="h-full flex flex-col text-slate-800 antialiased selection:bg-cscSaffron selection:text-white">
+
+    <!-- ADMIN LOGIN OVERLAY MODAL -->
+    <div id="adminLoginModal" class="fixed inset-0 bg-slate-900/90 z-50 flex items-center justify-center p-4">
+        <div class="bg-white w-full max-w-md rounded-2xl shadow-2xl overflow-hidden border border-slate-200">
+            <div class="bg-cscNavy text-white px-6 py-6 text-center border-b-4 border-cscSaffron space-y-2">
+                <div class="w-14 h-14 bg-white rounded-xl mx-auto flex flex-col items-center justify-center font-black text-xs text-cscSaffron border-2 border-cscSaffron shadow">
+                    <span>CSC</span>
+                    <i class="fa-solid fa-building-columns text-[10px] -mt-1 text-cscNavy"></i>
+                </div>
+                <h2 class="text-xl font-bold font-rozha text-white">धनखड़ सीएससी सेंटर ढाकला</h2>
+                <p class="text-xs text-slate-300">सुरक्षित एडमिन पोर्टल (Admin Authentication)</p>
+            </div>
+            
+            <form onsubmit="handleAdminLogin(event)" class="p-6 space-y-4">
+                <div>
+                    <label class="block text-xs font-bold text-slate-700 uppercase mb-1.5"><i class="fa-solid fa-lock text-cscSaffron mr-1"></i> एडमिन पासवर्ड दर्ज करें *</label>
+                    <div class="relative">
+                        <input type="password" id="adminPasswordInput" required placeholder="पासवर्ड दर्ज करें..." class="w-full px-3.5 py-2.5 pl-9 border border-slate-300 rounded-xl text-xs focus:ring-2 focus:ring-cscNavy font-mono">
+                        <i class="fa-solid fa-key absolute left-3 top-3 text-slate-400 text-xs"></i>
+                    </div>
+                    <p id="loginErrorMsg" class="text-rose-600 text-[11px] mt-1.5 hidden font-semibold"></p>
+                </div>
+
+                <div class="pt-2">
+                    <button type="submit" class="w-full bg-cscNavy hover:bg-slate-800 text-white font-bold py-3 px-4 rounded-xl shadow-lg transition flex items-center justify-center gap-2 text-xs">
+                        <i class="fa-solid fa-right-to-bracket text-cscSaffron"></i> लॉगिन करें (Login)
+                    </button>
+                </div>
+                <div class="text-center text-[11px] text-slate-400 pt-1">
+                    <span>अधिकृत ऑपरेटर: आशीष धनखड़ (9996036806)</span>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- MAIN APP CONTAINER (Hidden until login) -->
+    <div id="mainAppContainer" class="hidden flex-col flex-grow">
+        <header class="bg-cscNavy text-white shadow-xl no-print border-b-4 border-cscSaffron sticky top-0 z-40">
+            <div class="max-w-7xl mx-auto px-4 py-3 sm:px-6 lg:px-8 flex flex-wrap justify-between items-center gap-4">
+                
+                <div class="flex items-center space-x-3.5 rtl:space-x-reverse">
+                    <div class="bg-white p-2 rounded-xl shadow-md border border-slate-200">
+                        <div class="w-10 h-10 bg-cscNavy rounded-lg flex flex-col items-center justify-center font-black text-xs text-cscSaffron border-2 border-cscSaffron">
+                            <span>CSC</span>
+                            <i class="fa-solid fa-building-columns text-[10px] -mt-1 text-white"></i>
+                        </div>
+                    </div>
+                    <div>
+                        <h1 class="text-xl sm:text-2xl font-bold tracking-tight text-white flex items-center gap-2 font-rozha">
+                            धनखड़ सीएससी सेंटर ढाकला
+                            <span class="bg-cscSaffron text-slate-900 text-[10px] font-black px-2 py-0.5 rounded shadow-sm font-sans uppercase">डिजिटल सेवा केंद्र</span>
+                        </h1>
+                        <p class="text-xs text-slate-300 flex flex-wrap items-center gap-2">
+                            <span>CSC ID: <strong class="font-mono text-amber-300 font-bold">316521760018</strong></span>
+                            <span class="hidden sm:inline">•</span>
+                            <span>ऑपरेटर: <strong class="text-white">आशीष धनखड़</strong></span>
+                        </p>
+                    </div>
+                </div>
+
+                <div class="flex items-center space-x-3 text-xs bg-slate-800/90 px-3.5 py-2 rounded-xl border border-slate-700 shadow-inner">
+                    <div class="flex items-center gap-1.5 text-emerald-400 font-mono font-bold">
+                        <i class="fa-solid fa-phone"></i>
+                        <a href="tel:9996036806" class="hover:underline">9996036806</a>
+                    </div>
+                    <button onclick="handleAdminLogout()" title="लॉग आउट" class="bg-rose-600 hover:bg-rose-700 text-white px-2.5 py-1 rounded-lg font-bold transition flex items-center gap-1 ml-2">
+                        <i class="fa-solid fa-power-off"></i> लॉग-आउट
+                    </button>
+                </div>
+
+            </div>
+        </header>
+
+        <nav class="bg-white border-b border-slate-200 shadow-sm no-print sticky top-[69px] z-30">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="flex space-x-2 sm:space-x-6 overflow-x-auto py-2">
+                    <button onclick="switchTab('dashboard')" id="tab-dashboard" class="tab-btn active text-cscNavy border-cscSaffron border-b-2 font-bold px-3 py-2 text-xs sm:text-sm flex items-center gap-2 whitespace-nowrap">
+                        <i class="fa-solid fa-users text-cscSaffron"></i>
+                        ग्राहक प्रबंधन एवं ऑटो-अपग्रेड डैशबोर्ड
+                    </button>
+                    <button onclick="switchTab('certificate')" id="tab-certificate" class="tab-btn text-slate-500 hover:text-cscNavy font-medium px-3 py-2 text-xs sm:text-sm flex items-center gap-2 whitespace-nowrap">
+                        <i class="fa-solid fa-certificate text-slate-400"></i>
+                        सीएससी वफादारी प्रमाण पत्र (Certificate Engine)
+                    </button>
+                    <button onclick="switchTab('spin')" id="tab-spin" class="tab-btn text-slate-500 hover:text-cscNavy font-medium px-3 py-2 text-xs sm:text-sm flex items-center gap-2 whitespace-nowrap">
+                        <i class="fa-solid fa-dharmachakra text-amber-500"></i>
+                        भाग्यशाली लकी स्पिन (Lucky Spin Wheel)
+                    </button>
+                    <button onclick="switchTab('rules')" id="tab-rules" class="tab-btn text-slate-500 hover:text-cscNavy font-medium px-3 py-2 text-xs sm:text-sm flex items-center gap-2 whitespace-nowrap">
+                        <i class="fa-solid fa-circle-info text-sky-500"></i>
+                        कार्ड योजना व डिस्काउंट नियम
+                    </button>
+                </div>
+            </div>
+        </nav>
+
+        <main class="flex-grow max-w-7xl w-full mx-auto p-4 sm:p-6 lg:p-8">
+
+            <!-- STATS OVERVIEW CARDS -->
+            <div class="grid grid-cols-2 md:grid-cols-6 gap-3 mb-6 no-print">
+                <div class="bg-white p-3 rounded-xl shadow-sm border border-slate-200 flex items-center justify-between">
+                    <div>
+                        <div class="text-[11px] font-semibold text-slate-500">कुल ग्राहक</div>
+                        <div id="statTotal" class="text-2xl font-black text-cscNavy font-teko">0</div>
+                    </div>
+                    <div class="w-8 h-8 rounded-full bg-slate-100 flex items-center justify-center text-cscNavy text-xs"><i class="fa-solid fa-address-book"></i></div>
+                </div>
+
+                <div class="bg-white p-3 rounded-xl shadow-sm border border-slate-200 flex items-center justify-between">
+                    <div>
+                        <div class="text-[11px] font-semibold text-slate-500">Normal</div>
+                        <div id="statNormal" class="text-2xl font-black text-emerald-700 font-teko">0</div>
+                    </div>
+                    <div class="w-8 h-8 rounded-full bg-emerald-50 flex items-center justify-center text-emerald-700 text-xs"><i class="fa-solid fa-user-check"></i></div>
+                </div>
+
+                <div class="bg-white p-3 rounded-xl shadow-sm border border-slate-200 flex items-center justify-between">
+                    <div>
+                        <div class="text-[11px] font-semibold text-slate-500">Silver (20%)</div>
+                        <div id="statSilver" class="text-2xl font-black text-slate-700 font-teko">0</div>
+                    </div>
+                    <div class="w-8 h-8 rounded-full bg-slate-100 flex items-center justify-center text-slate-600 text-xs"><i class="fa-solid fa-award"></i></div>
+                </div>
+
+                <div class="bg-white p-3 rounded-xl shadow-sm border border-slate-200 flex items-center justify-between">
+                    <div>
+                        <div class="text-[11px] font-semibold text-slate-500">Gold (50%)</div>
+                        <div id="statGold" class="text-2xl font-black text-amber-600 font-teko">0</div>
+                    </div>
+                    <div class="w-8 h-8 rounded-full bg-amber-50 flex items-center justify-center text-amber-600 text-xs"><i class="fa-solid fa-crown"></i></div>
+                </div>
+
+                <div class="bg-white p-3 rounded-xl shadow-sm border border-slate-200 flex items-center justify-between">
+                    <div>
+                        <div class="text-[11px] font-semibold text-slate-500">Platinum (90%)</div>
+                        <div id="statPlatinum" class="text-2xl font-black text-sky-600 font-teko">0</div>
+                    </div>
+                    <div class="w-8 h-8 rounded-full bg-sky-50 flex items-center justify-center text-sky-600 text-xs"><i class="fa-solid fa-gem"></i></div>
+                </div>
+
+                <div class="bg-white p-3 rounded-xl shadow-sm border border-slate-200 flex items-center justify-between">
+                    <div>
+                        <div class="text-[11px] font-semibold text-slate-500">Diamond (25% Lifetime)</div>
+                        <div id="statDiamond" class="text-2xl font-black text-sky-800 font-teko">0</div>
+                    </div>
+                    <div class="w-8 h-8 rounded-full bg-sky-100 flex items-center justify-center text-sky-800 text-xs"><i class="fa-solid fa-diamond"></i></div>
+                </div>
+            </div>
+
+            <!-- TAB 1: CUSTOMER DASHBOARD & REGISTRY -->
+            <div id="view-dashboard" class="tab-content block space-y-5">
+                <div class="bg-white p-5 rounded-2xl shadow-md border border-slate-200 space-y-4">
+                    
+                    <div class="flex flex-wrap justify-between items-center gap-3 border-b border-slate-200 pb-4">
+                        <div>
+                            <h2 class="text-lg font-bold text-cscNavy flex items-center gap-2">
+                                <i class="fa-solid fa-users-gear text-cscSaffron"></i>
+                                ग्राहक ऑटो-अपग्रेड एवं डिस्काउंट रजिस्ट्री
+                            </h2>
+                            <p class="text-xs text-slate-500">प्रत्येक 10 सेवाओं पर स्वतः कार्ड अपग्रेड, 30 दिन एक्सटेंशन व डायमंड लाइफटाइम डिस्काउंट</p>
+                        </div>
+
+                        <div class="flex flex-wrap items-center gap-2">
+                            <button onclick="openAddCustomerModal()" class="bg-cscNavy hover:bg-slate-800 text-white text-xs font-bold px-3.5 py-2 rounded-xl shadow transition flex items-center gap-1.5">
+                                <i class="fa-solid fa-user-plus text-cscSaffron"></i> नया ग्राहक जोड़ें
+                            </button>
+                            <button onclick="runAuditAndDowngradeCheck()" class="bg-emerald-700 hover:bg-emerald-800 text-white text-xs font-bold px-3.5 py-2 rounded-xl shadow transition flex items-center gap-1.5">
+                                <i class="fa-solid fa-clock-rotate-left"></i> ऑटो-डाउनग्रेड जांच (Audit)
+                            </button>
+                            <button onclick="resetToMockData()" class="bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-semibold px-3 py-2 rounded-xl border border-slate-300 transition flex items-center gap-1" title="सैंपल डेटा लोड करें">
+                                <i class="fa-solid fa-rotate-left text-slate-500"></i> नमूना डेटा
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Filters -->
+                    <div class="grid grid-cols-1 sm:grid-cols-3 gap-3 bg-slate-50 p-3 rounded-xl border border-slate-200">
+                        <div class="relative">
+                            <i class="fa-solid fa-magnifying-glass absolute left-3 top-2.5 text-slate-400 text-xs"></i>
+                            <input type="text" id="searchInput" oninput="filterCustomerRegistry()" placeholder="नाम, मोबाइल या सीएससी आईडी खोजें..." class="w-full pl-8 pr-3 py-1.5 text-xs border border-slate-300 rounded-lg focus:ring-2 focus:ring-cscNavy">
+                        </div>
+                        <div>
+                            <select id="filterTier" onchange="filterCustomerRegistry()" class="w-full py-1.5 px-3 text-xs border border-slate-300 rounded-lg focus:ring-2 focus:ring-cscNavy bg-white">
+                                <option value="ALL">सभी टियर (All Tier Cards)</option>
+                                <option value="Normal">Normal Card</option>
+                                <option value="Silver">Silver Card (20% Off)</option>
+                                <option value="Gold">Gold Card (50% Off)</option>
+                                <option value="Platinum">Platinum Card (90% Off)</option>
+                                <option value="Diamond">Diamond Card (25% Lifetime)</option>
+                            </select>
+                        </div>
+                        <div>
+                            <select id="filterStatus" onchange="filterCustomerRegistry()" class="w-full py-1.5 px-3 text-xs border border-slate-300 rounded-lg focus:ring-2 focus:ring-cscNavy bg-white">
+                                <option value="ALL">सभी स्थितियां (All Status)</option>
+                                <option value="ACTIVE">सक्रिय कार्ड (Active)</option>
+                                <option value="EXPIRED">समय सीमा समाप्त (Expired)</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <!-- Bulk Actions -->
+                    <div class="flex flex-wrap items-center justify-between gap-3 bg-rose-50 p-2.5 rounded-xl border border-rose-200 text-xs">
+                        <div class="flex items-center gap-2 font-bold text-rose-900">
+                            <input type="checkbox" id="selectAllCheckbox" onchange="toggleSelectAllCustomers(this)" class="w-4 h-4 text-rose-600 rounded focus:ring-rose-500 cursor-pointer">
+                            <label for="selectAllCheckbox" class="cursor-pointer">सभी को चुनें (Select All)</label>
+                            <span id="selectedBadge" class="bg-rose-200 text-rose-800 text-[10px] px-2 py-0.5 rounded-full font-mono ml-1">0 चयनित</span>
+                        </div>
+                        <button id="btnBulkDelete" onclick="openBulkDeleteModal()" disabled class="bg-rose-600 hover:bg-rose-700 disabled:bg-slate-300 disabled:cursor-not-allowed text-white font-bold px-3 py-1.5 rounded-lg shadow transition flex items-center gap-1.5">
+                            <i class="fa-solid fa-trash-can"></i> चयनित ग्राहक हटाएं (Delete Selected)
+                        </button>
+                    </div>
+
+                    <div class="overflow-x-auto rounded-xl border border-slate-200">
+                        <table class="w-full text-left text-xs border-collapse">
+                            <thead>
+                                <tr class="bg-slate-100 text-slate-700 uppercase tracking-wider font-semibold border-b border-slate-200">
+                                    <th class="p-3 w-8 text-center">#</th>
+                                    <th class="p-3">ग्राहक का नाम व आईडी</th>
+                                    <th class="p-3">मोबाइल व ईमेल</th>
+                                    <th class="p-3">वर्तमान टियर</th>
+                                    <th class="p-3">सेवा प्रगति (0-10)</th>
+                                    <th class="p-3">छूट (Discount)</th>
+                                    <th class="p-3">वैधता तिथि / मियाद</th>
+                                    <th class="p-3 text-center">सेवा जोड़े (+1)</th>
+                                    <th class="p-3 text-center">कार्रवाई</th>
+                                </tr>
+                            </thead>
+                            <tbody id="customerTableBody" class="divide-y divide-slate-200 bg-white">
+                                <!-- Populated via JS -->
+                            </tbody>
+                        </table>
+                    </div>
+
+                </div>
+            </div>
+
+            <!-- TAB 2: CERTIFICATE GENERATOR -->
+            <div id="view-certificate" class="tab-content hidden space-y-6">
+                <div class="grid grid-cols-1 lg:grid-cols-12 gap-8">
+
+                    <!-- Left Control Panel -->
+                    <div class="lg:col-span-4 bg-white p-5 rounded-2xl shadow-md border border-slate-200 no-print space-y-5">
+                        <div class="border-b border-slate-200 pb-3">
+                            <h2 class="text-lg font-bold text-cscNavy flex items-center gap-2">
+                                <i class="fa-solid fa-sliders text-cscSaffron"></i>
+                                प्रमाण पत्र चयनकर्ता
+                            </h2>
+                            <p class="text-xs text-slate-500">चयनित ग्राहक के टियर के अनुसार प्रमाण पत्र बनाएं</p>
+                        </div>
+
+                        <div>
+                            <label class="block text-xs font-bold text-slate-700 uppercase mb-1">ग्राहक चुनें *</label>
+                            <select id="certCustomerSelect" onchange="loadCustomerIntoCertificate()" class="w-full px-3 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-cscNavy text-xs bg-slate-50 font-medium">
+                                <!-- Populated dynamically -->
+                            </select>
+                        </div>
+
+                        <div class="p-3.5 rounded-xl bg-slate-50 border border-slate-200 space-y-2 text-xs">
+                            <div class="font-bold text-slate-800 flex items-center gap-1.5">
+                                <i class="fa-solid fa-id-card text-cscSaffron"></i>
+                                चयनित ग्राहक विवरण:
+                            </div>
+                            <div class="grid grid-cols-2 gap-1.5 text-slate-600">
+                                <div>नाम: <span id="previewCustName" class="font-bold text-slate-800">-</span></div>
+                                <div>आईडी: <span id="previewCustId" class="font-mono text-slate-800">-</span></div>
+                                <div>फोन: <span id="previewCustPhone" class="font-mono text-slate-800">-</span></div>
+                                <div>टियर: <span id="previewCustTier" class="font-bold text-cscNavy">-</span></div>
+                                <div class="col-span-2">पूर्ण सेवाएं: <span id="previewCustServices" class="font-bold text-emerald-700">-</span></div>
+                                <div class="col-span-2">वैधता तिथि: <span id="previewCustExpiry" class="font-bold text-slate-800">-</span></div>
+                            </div>
+                        </div>
+
+                        <div class="pt-2 space-y-2">
+                            <button onclick="downloadCertificateImage()" class="w-full bg-cscSaffron hover:bg-orange-600 text-white font-bold py-2.5 px-4 rounded-xl shadow transition flex items-center justify-center gap-2 text-xs">
+                                <i class="fa-solid fa-file-arrow-down"></i>
+                                इमेज डाउनलोड (PNG File)
+                            </button>
+                            <button onclick="window.print()" class="w-full bg-cscNavy hover:bg-slate-800 text-white font-bold py-2.5 px-4 rounded-xl shadow transition flex items-center justify-center gap-2 text-xs">
+                                <i class="fa-solid fa-print text-cscSaffron"></i>
+                                प्रिंट प्रमाण पत्र (HD Print)
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Right Certificate Render Canvas -->
+                    <div class="lg:col-span-8 flex flex-col items-center">
+                        <div class="w-full flex justify-between items-center bg-white p-3 rounded-t-xl border border-slate-200 no-print">
+                            <div class="text-xs font-bold text-slate-700 uppercase flex items-center gap-2">
+                                <i class="fa-solid fa-certificate text-cscSaffron"></i>
+                                सीएससी डिजिटल प्रमाण पत्र कैनवास (Certificate Canvas)
+                            </div>
+                            <span class="text-[11px] text-slate-500">CSC Theme Auto-Synced</span>
+                        </div>
+
+                        <div class="w-full bg-slate-200 p-2 sm:p-4 rounded-b-xl overflow-x-auto flex justify-center">
+                            <div id="printableCertificateContainer" class="w-[800px] min-w-[760px] bg-white p-8 relative rounded-xl shadow-2xl transition-all duration-300 csc-watermark text-slate-800 my-2">
+                                
+                                <div id="certBorderBox" class="cert-border-Normal p-6 relative flex flex-col justify-between min-h-[540px]">
+
+                                    <!-- Top CSC Header -->
+                                    <div class="flex justify-between items-start border-b-2 border-slate-300 pb-4">
+                                        <div class="flex items-center space-x-3.5">
+                                            <div class="w-16 h-16 bg-cscNavy rounded-full border-2 border-cscSaffron flex flex-col items-center justify-center text-white shadow">
+                                                <span class="text-xs font-black tracking-widest text-cscSaffron">CSC</span>
+                                                <i class="fa-solid fa-building-columns text-sm text-white"></i>
+                                            </div>
+                                            <div>
+                                                <div class="text-2xl font-bold font-rozha text-cscNavy tracking-wide">धनखड़ सीएससी सेंटर ढाकला</div>
+                                                <div class="text-xs text-slate-600 font-semibold">डिजिटल सेवा केंद्र - कॉमन सर्विस सेंटर योजना (Digital India)</div>
+                                                <div class="text-[11px] text-slate-500 font-mono">CSC ID: 316521760018 | ढाकला (झज्जर) हरियाणा</div>
+                                            </div>
+                                        </div>
+
+                                        <div class="text-right flex flex-col items-end">
+                                            <div id="certTierBadge" class="badge-Normal px-4 py-1.5 rounded-full text-xs font-black uppercase tracking-widest flex items-center gap-1.5 shadow">
+                                                <i class="fa-solid fa-award"></i>
+                                                <span id="badgeTierText">NORMAL TIER</span>
+                                            </div>
+                                            <div class="text-[10px] text-slate-500 mt-1 font-mono">क्रमांक: <span id="certCodeDisplay" class="font-bold">CSC-DH-1001</span></div>
+                                        </div>
+                                    </div>
+
+                                    <!-- Certificate Main Body -->
+                                    <div class="text-center my-6 space-y-3">
+                                        <div class="inline-block relative">
+                                            <h3 id="certTitleText" class="text-2xl font-bold text-slate-800 font-rozha px-6 py-1 tracking-wider border-b-2 border-cscSaffron">
+                                                विशेष ग्राहक वफादारी प्रमाण पत्र
+                                            </h3>
+                                        </div>
+                                        <p class="text-xs text-slate-600 uppercase tracking-widest font-semibold pt-1">यह प्रमाण पत्र सम्मानपूर्वक प्रदान किया जाता है</p>
+                                        
+                                        <div class="py-2">
+                                            <div id="certCustomerName" class="text-3xl font-extrabold text-cscNavy font-rozha border-b border-dashed border-slate-400 inline-block px-8 py-1">
+                                                सुरेश कुमार
+                                            </div>
+                                        </div>
+
+                                        <p class="text-sm text-slate-700 max-w-xl mx-auto leading-relaxed">
+                                            को धनखड़ सीएससी सेंटर ढाकला की निरंतर डिजिटल सेवाओं का उपयोग करने एवं सीएससी परिवार का निष्ठावान सदस्य बनने पर 
+                                            <span id="certTierHighlight" class="font-bold text-cscNavy">Normal Loyalty Certificate</span> 
+                                            प्रदान किया जाता है।
+                                        </p>
+
+                                        <!-- Discount & Expiry Seal Box -->
+                                        <div class="my-4 bg-slate-50 p-3.5 rounded-xl border border-slate-300 max-w-lg mx-auto flex items-center justify-around shadow-sm">
+                                            <div class="text-left">
+                                                <div class="text-[10px] text-slate-500 uppercase font-bold">सीएससी शुल्क डिस्काउंट शील (Discount Seal)</div>
+                                                <div id="certDiscountValue" class="text-2xl font-black text-cscNavy font-teko tracking-wide">
+                                                    लकी स्पिन / अपग्रेड योग्य
+                                                </div>
+                                            </div>
+                                            <div class="h-9 w-px bg-slate-300"></div>
+                                            <div class="text-left">
+                                                <div class="text-[10px] text-slate-500 uppercase font-bold">कार्ड वैध तिथि (Expiry Date)</div>
+                                                <div id="certValidityText" class="text-sm font-bold text-slate-800 font-mono">
+                                                    11/01/2027
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <!-- Footer Stamps -->
+                                    <div class="grid grid-cols-3 items-end pt-4 border-t border-slate-200 text-xs">
+                                        <div class="space-y-1">
+                                            <div class="flex items-center gap-2">
+                                                <div class="w-12 h-12 bg-slate-100 border border-slate-400 p-1 rounded flex items-center justify-center">
+                                                    <svg class="w-full h-full text-slate-800" viewBox="0 0 24 24" fill="currentColor">
+                                                        <path d="M2 2h8v8H2V2zm2 2v4h4V4H4zm9-2h8v8h-8V2zm2 2v4h4V4h-4zM2 14h8v8H2v-8zm2 2v4h4v-4H4zm13-2h2v2h-2v-2zm-4 0h2v2h-2v-2zm2 4h2v2h-2v-2zm2 2h2v2h-2v-2zm-4 0h2v2h-2v-2zm2-4h2v2h-2v-2z"/>
+                                                    </svg>
+                                                </div>
+                                                <div class="text-[10px] text-slate-500">
+                                                    <div>जारी तिथि: <span id="certRegDate" class="font-semibold text-slate-700">11/10/2026</span></div>
+                                                    <div>कुल सेवाएं: <span id="certServicesCount" class="font-bold text-emerald-700">10 / 10</span></div>
+                                                    <div>स्थिति: <span id="certStatusTag" class="font-bold text-sky-700">सक्रिय (Active)</span></div>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div class="text-center">
+                                            <div class="inline-block p-1 rounded-full border border-cscSaffron bg-amber-50">
+                                                <div class="w-14 h-14 rounded-full border-2 border-dashed border-cscNavy flex flex-col items-center justify-center text-[9px] font-bold text-cscNavy">
+                                                    <span>CSC DHAKLA</span>
+                                                    <i class="fa-solid fa-stamp text-xs text-cscSaffron"></i>
+                                                    <span>VERIFIED</span>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div class="text-right space-y-1">
+                                            <div class="font-rozha text-sm text-cscNavy italic pr-2">Ashish Dhankhar</div>
+                                            <div class="border-t border-slate-400 pt-1 font-bold text-slate-800 text-xs">आशीष धनखड़</div>
+                                            <div class="text-[10px] text-slate-500">अधिकृत संचालक, धनखड़ सीएससी</div>
+                                            <div class="text-[9px] text-slate-400 font-mono">मो: 9996036806</div>
+                                        </div>
+                                    </div>
+
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+
+            <!-- TAB 3: LUCKY SPIN WHEEL -->
+            <div id="view-spin" class="tab-content hidden space-y-6">
+                <div class="max-w-2xl mx-auto bg-white p-6 sm:p-8 rounded-2xl shadow-xl border border-slate-200 text-center space-y-6">
+                    <div>
+                        <span class="bg-amber-100 text-amber-800 text-xs font-bold px-3 py-1 rounded-full uppercase tracking-wider">Normal Tier Special Reward System</span>
+                        <h2 class="text-2xl font-bold text-cscNavy mt-2 font-rozha">धनखड़ सीएससी लकी स्पिन व्हील</h2>
+                        <p class="text-xs text-slate-500 max-w-md mx-auto">Normal Card ग्राहक 10 सेवाएं पूरी होने पर लकी स्पिन से विशेष इनाम जीत सकते हैं या Silver Card अपग्रेड ले सकते हैं!</p>
+                    </div>
+
+                    <div class="relative inline-block my-2">
+                        <div class="absolute -top-4 left-1/2 -translate-x-1/2 z-20 text-cscSaffron text-3xl drop-shadow-md">
+                            <i class="fa-solid fa-location-pin fa-rotate-180"></i>
+                        </div>
+                        <canvas id="wheelCanvas" width="300" height="300" class="rounded-full shadow-2xl border-4 border-cscNavy bg-white"></canvas>
+                    </div>
+
+                    <div class="flex justify-center items-center gap-3 flex-wrap">
+                        <button id="btnSpinNow" onclick="spinWheelAction()" class="bg-cscSaffron hover:bg-orange-600 text-white font-bold text-sm px-8 py-3 rounded-full shadow-lg transform active:scale-95 transition flex items-center gap-2">
+                            <i class="fa-solid fa-arrows-spin"></i> लकी स्पिन करें (Spin Wheel)
+                        </button>
+                    </div>
+
+                    <div id="spinRewardBox" class="hidden p-4 rounded-2xl bg-emerald-50 border border-emerald-300 text-emerald-900 max-w-md mx-auto space-y-1">
+                        <div class="font-bold text-base flex items-center justify-center gap-2">
+                            <i class="fa-solid fa-trophy text-amber-500"></i> बधाई हो! आपको मिला इनाम:
+                        </div>
+                        <div id="spinRewardName" class="text-xl font-extrabold text-cscNavy font-rozha"></div>
+                        <p class="text-xs text-slate-600">यह छूट आपकी अगली सीएससी सेवा पर मान्य होगी।</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- TAB 4: CARD RULES & DISCOUNT STRUCTURE -->
+            <div id="view-rules" class="tab-content hidden space-y-6">
+                <div class="bg-white p-6 sm:p-8 rounded-2xl shadow-md border border-slate-200 space-y-6">
+                    <div>
+                        <h2 class="text-xl font-bold text-cscNavy flex items-center gap-2 font-rozha">
+                            <i class="fa-solid fa-award text-cscSaffron"></i>
+                            सीएससी ग्राहक वफादारी योजना एवं डिस्काउंट संरचना
+                        </h2>
+                        <p class="text-xs text-slate-500">प्रत्येक कार्ड श्रेणी में अनिवार्य सेवाएं, मियाद (Expiry) एवं डायमंड लाइफटाइम नियम</p>
+                    </div>
+
+                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-4">
+                        
+                        <div class="border-2 border-slate-300 rounded-2xl p-4 bg-slate-50 space-y-2">
+                            <div class="bg-slate-700 text-white text-[10px] font-bold px-2.5 py-0.5 rounded-full inline-block">STAGE 1</div>
+                            <h3 class="text-base font-bold text-slate-800">Normal Card</h3>
+                            <div class="text-xl font-black text-slate-700 font-teko">लकी स्पिन या अपग्रेड</div>
+                            <ul class="text-[11px] space-y-1.5 text-slate-600 border-t border-slate-200 pt-2">
+                                <li><i class="fa-solid fa-check text-emerald-600 mr-1"></i> <strong>सेवाएं:</strong> 10 सेवाएं</li>
+                                <li><i class="fa-solid fa-clock text-amber-600 mr-1"></i> <strong>समय सीमा:</strong> 3 महीने</li>
+                            </ul>
+                        </div>
+
+                        <div class="border-2 border-slate-400 rounded-2xl p-4 bg-slate-100 space-y-2 shadow-sm">
+                            <div class="bg-slate-600 text-white text-[10px] font-bold px-2.5 py-0.5 rounded-full inline-block">STAGE 2</div>
+                            <h3 class="text-base font-bold text-slate-800">Silver Card</h3>
+                            <div class="text-xl font-black text-slate-800 font-teko">20% CSC Charge Off</div>
+                            <ul class="text-[11px] space-y-1.5 text-slate-600 border-t border-slate-300 pt-2">
+                                <li><i class="fa-solid fa-check text-emerald-600 mr-1"></i> <strong>सेवाएं:</strong> 10 सेवाएं</li>
+                                <li><i class="fa-solid fa-clock text-amber-600 mr-1"></i> <strong>समय सीमा:</strong> 5 महीने</li>
+                            </ul>
+                        </div>
+
+                        <div class="border-2 border-amber-400 rounded-2xl p-4 bg-amber-50 space-y-2 shadow-sm">
+                            <div class="bg-amber-600 text-white text-[10px] font-bold px-2.5 py-0.5 rounded-full inline-block">STAGE 3</div>
+                            <h3 class="text-base font-bold text-amber-900">Gold Card</h3>
+                            <div class="text-xl font-black text-amber-700 font-teko">50% CSC Charge Off</div>
+                            <ul class="text-[11px] space-y-1.5 text-slate-600 border-t border-amber-200 pt-2">
+                                <li><i class="fa-solid fa-check text-emerald-600 mr-1"></i> <strong>सेवाएं:</strong> 10 सेवाएं</li>
+                                <li><i class="fa-solid fa-clock text-amber-600 mr-1"></i> <strong>समय सीमा:</strong> 7 महीने</li>
+                            </ul>
+                        </div>
+
+                        <div class="border-2 border-sky-400 rounded-2xl p-4 bg-sky-50 space-y-2 shadow-md">
+                            <div class="bg-cscNavy text-white text-[10px] font-bold px-2.5 py-0.5 rounded-full inline-block">STAGE 4</div>
+                            <h3 class="text-base font-bold text-sky-950">Platinum Card</h3>
+                            <div class="text-xl font-black text-sky-700 font-teko">90% CSC Charge Off</div>
+                            <ul class="text-[11px] space-y-1.5 text-slate-600 border-t border-sky-200 pt-2">
+                                <li><i class="fa-solid fa-check text-emerald-600 mr-1"></i> <strong>सेवाएं:</strong> 10 सेवाएं</li>
+                                <li><i class="fa-solid fa-clock text-amber-600 mr-1"></i> <strong>समय सीमा:</strong> 9 महीने (बेस)</li>
+                                <li><i class="fa-solid fa-plus text-sky-600 mr-1"></i> 10 सेवाएं पूर्ण होने पर +30 दिन एक्सटेंशन (अधिकतम 3 बार)।</li>
+                            </ul>
+                        </div>
+
+                        <div class="border-2 border-sky-600 rounded-2xl p-4 bg-sky-100/70 space-y-2 shadow-lg col-span-1 md:col-span-2 lg:col-span-1">
+                            <div class="bg-sky-800 text-white text-[10px] font-bold px-2.5 py-0.5 rounded-full inline-block">STAGE 5 (LIFETIME)</div>
+                            <h3 class="text-base font-bold text-sky-900">Diamond Card</h3>
+                            <div class="text-xl font-black text-sky-900 font-teko">20% to 25% Lifetime Off</div>
+                            <ul class="text-[11px] space-y-1.5 text-slate-700 border-t border-sky-300 pt-2">
+                                <li><i class="fa-solid fa-crown text-amber-500 mr-1"></i> <strong>शर्त:</strong> प्लैटिनम 10 सेवाएं 3 बार पूर्ण।</li>
+                                <li><i class="fa-solid fa-infinity text-sky-700 mr-1"></i> <strong>वैधता:</strong> आजीवन (No Expiry)</li>
+                                <li><i class="fa-solid fa-gem text-sky-600 mr-1"></i> जीवनभर सीएससी चार्जेज पर 25% की स्थायी छूट!</li>
+                            </ul>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+
+        </main>
+
+        <!-- Modal 1: Add New Customer -->
+        <div id="addCustomerModal" class="fixed inset-0 bg-slate-900/60 z-50 hidden flex items-center justify-center p-4">
+            <div class="bg-white w-full max-w-lg rounded-2xl shadow-2xl overflow-hidden border border-slate-200">
+                <div class="bg-cscNavy text-white px-6 py-4 flex justify-between items-center border-b-4 border-cscSaffron">
+                    <h3 class="font-bold text-base flex items-center gap-2">
+                        <i class="fa-solid fa-user-plus text-cscSaffron"></i> नया ग्राहक पंजीकृत करें
+                    </h3>
+                    <button onclick="closeAddCustomerModal()" class="text-slate-300 hover:text-white"><i class="fa-solid fa-xmark text-lg"></i></button>
+                </div>
+                
+                <form onsubmit="handleAddCustomerSubmit(event)" class="p-6 space-y-4">
+                    <div>
+                        <label class="block text-xs font-bold text-slate-700 uppercase mb-1">ग्राहक का नाम *</label>
+                        <input type="text" id="addName" required placeholder="उदा: राजेश कुमार" class="w-full px-3 py-2 border border-slate-300 rounded-lg text-xs focus:ring-2 focus:ring-cscNavy">
+                    </div>
+
+                    <div class="grid grid-cols-2 gap-3">
+                        <div>
+                            <label class="block text-xs font-bold text-slate-700 uppercase mb-1">मोबाइल नंबर *</label>
+                            <input type="tel" id="addPhone" required placeholder="999XXXXXXX" class="w-full px-3 py-2 border border-slate-300 rounded-lg text-xs focus:ring-2 focus:ring-cscNavy">
+                        </div>
+                        <div>
+                            <label class="block text-xs font-bold text-slate-700 uppercase mb-1">जीमेल (Email)</label>
+                            <input type="email" id="addEmail" placeholder="example@gmail.com" class="w-full px-3 py-2 border border-slate-300 rounded-lg text-xs focus:ring-2 focus:ring-cscNavy">
+                        </div>
+                    </div>
+
+                    <div class="grid grid-cols-2 gap-3">
+                        <div>
+                            <label class="block text-xs font-bold text-slate-700 uppercase mb-1">जारी तिथि *</label>
+                            <input type="date" id="addDate" required class="w-full px-3 py-2 border border-slate-300 rounded-lg text-xs focus:ring-2 focus:ring-cscNavy">
+                        </div>
+                        <div>
+                            <label class="block text-xs font-bold text-slate-700 uppercase mb-1">प्रारंभिक टियर</label>
+                            <select id="addTier" class="w-full px-3 py-2 border border-slate-300 rounded-lg text-xs focus:ring-2 focus:ring-cscNavy bg-slate-50">
+                                <option value="Normal">Normal Card (3 महीने limit)</option>
+                                <option value="Silver">Silver Card (20% Off - 5 महीने)</option>
+                                <option value="Gold">Gold Card (50% Off - 7 महीने)</option>
+                                <option value="Platinum">Platinum Card (90% Off - 9 महीने)</option>
+                                <option value="Diamond">Diamond Card (25% Lifetime)</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="pt-3 flex justify-end gap-2">
+                        <button type="button" onclick="closeAddCustomerModal()" class="px-4 py-2 border border-slate-300 rounded-lg text-xs font-bold text-slate-600 hover:bg-slate-100">रद्द करें</button>
+                        <button type="submit" class="px-5 py-2 bg-cscNavy hover:bg-slate-800 text-white rounded-lg text-xs font-bold shadow flex items-center gap-1.5">
+                            <i class="fa-solid fa-floppy-disk text-cscSaffron"></i> पंजीकृत करें
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        <!-- Modal 2: Log Service -->
+        <div id="serviceLogModal" class="fixed inset-0 bg-slate-900/60 z-50 hidden flex items-center justify-center p-4">
+            <div class="bg-white w-full max-w-lg rounded-2xl shadow-2xl overflow-hidden border border-slate-200">
+                <div class="bg-cscNavy text-white px-6 py-4 flex justify-between items-center border-b-4 border-cscSaffron">
+                    <h3 class="font-bold text-base flex items-center gap-2">
+                        <i class="fa-solid fa-square-plus text-cscSaffron"></i> सीएससी डिजिटल सेवा प्रविष्टि (+1 Service)
+                    </h3>
+                    <button onclick="closeServiceLogModal()" class="text-slate-300 hover:text-white"><i class="fa-solid fa-xmark text-lg"></i></button>
+                </div>
+                
+                <form onsubmit="handleLogServiceSubmit(event)" class="p-6 space-y-4">
+                    <input type="hidden" id="logTargetCustId" value="">
+                    
+                    <div class="bg-slate-50 p-3 rounded-xl border border-slate-200 text-xs space-y-1">
+                        <div>ग्राहक: <span id="logCustNameDisplay" class="font-bold text-cscNavy"></span></div>
+                        <div>वर्तमान टियर: <span id="logCustTierDisplay" class="font-bold text-emerald-700"></span></div>
+                        <div>सेवा प्रगति: <span id="logCustCountDisplay" class="font-bold font-mono"></span> / 10</div>
+                    </div>
+
+                    <div>
+                        <label class="block text-xs font-bold text-slate-700 uppercase mb-1">सीएससी सेवा श्रेणी *</label>
+                        <select id="logServiceType" required class="w-full px-3 py-2 border border-slate-300 rounded-lg text-xs focus:ring-2 focus:ring-cscNavy">
+                            <option value="आधार अपडेट / बायोमेट्रिक">आधार अपडेट / बायोमेट्रिक</option>
+                            <option value="पैन कार्ड नया / संशोधन">पैन कार्ड नया / संशोधन</option>
+                            <option value="फैमिली आईडी (Pariwar Pehchan Patra)">फैमिली आईडी (Pariwar Pehchan Patra)</option>
+                            <option value="आय / जाति / निवास प्रमाण पत्र">आय / जाति / निवास प्रमाण पत्र</option>
+                            <option value="बैंकिंग / वृद्धावस्था पेंशन">बैंकिंग / वृद्धावस्था पेंशन</option>
+                            <option value="बिजली बिल / सरकारी योजना फॉर्म">बिजली बिल / सरकारी योजना फॉर्म</option>
+                            <option value="अन्य सीएससी डिजिटल कार्य">अन्य सीएससी डिजिटल कार्य</option>
+                        </select>
+                    </div>
+
+                    <div>
+                        <label class="block text-xs font-bold text-slate-700 uppercase mb-1">सेवा रिमार्क्स / नोट्स (Optional)</label>
+                        <input type="text" id="logServiceNotes" placeholder="उदा: Ref/Ack नंबर या विवरण" class="w-full px-3 py-2 border border-slate-300 rounded-lg text-xs focus:ring-2 focus:ring-cscNavy">
+                    </div>
+
+                    <div class="pt-2 flex justify-end gap-2">
+                        <button type="button" onclick="closeServiceLogModal()" class="px-4 py-2 border border-slate-300 rounded-lg text-xs font-bold text-slate-600 hover:bg-slate-100">रद्द करें</button>
+                        <button type="submit" class="px-5 py-2 bg-emerald-700 hover:bg-emerald-800 text-white rounded-lg text-xs font-bold shadow flex items-center gap-1.5">
+                            <i class="fa-solid fa-plus"></i> सेवा जोड़ें (+1)
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        <!-- Modal 3: History -->
+        <div id="historyModal" class="fixed inset-0 bg-slate-900/60 z-50 hidden flex items-center justify-center p-4">
+            <div class="bg-white w-full max-w-xl rounded-2xl shadow-2xl overflow-hidden border border-slate-200">
+                <div class="bg-cscNavy text-white px-6 py-4 flex justify-between items-center border-b-4 border-cscSaffron">
+                    <h3 class="font-bold text-base flex items-center gap-2">
+                        <i class="fa-solid fa-list-check text-cscSaffron"></i> ग्राहक सेवा इतिहास (Service History Log)
+                    </h3>
+                    <button onclick="closeHistoryModal()" class="text-slate-300 hover:text-white"><i class="fa-solid fa-xmark text-lg"></i></button>
+                </div>
+                
+                <div class="p-6 space-y-4">
+                    <div class="bg-slate-50 p-3 rounded-xl border border-slate-200 text-xs flex justify-between items-center">
+                        <div>
+                            <div class="font-bold text-cscNavy text-sm" id="histCustName"></div>
+                            <div class="text-slate-500 font-mono" id="histCustPhone"></div>
+                        </div>
+                        <div id="histCustBadge"></div>
+                    </div>
+
+                    <div class="max-h-60 overflow-y-auto rounded-lg border border-slate-200">
+                        <table class="w-full text-left text-xs">
+                            <thead>
+                                <tr class="bg-slate-100 border-b border-slate-200 text-slate-600 uppercase">
+                                    <th class="p-2">तिथि</th>
+                                    <th class="p-2">सेवा</th>
+                                    <th class="p-2">विवरण</th>
+                                </tr>
+                            </thead>
+                            <tbody id="historyTableBody" class="divide-y divide-slate-200">
+                                <!-- Populated via JS -->
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <div class="pt-2 flex justify-end">
+                        <button onclick="closeHistoryModal()" class="px-4 py-2 bg-cscNavy text-white rounded-lg text-xs font-bold">बंद करें</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Modal 4: Delete Single Customer -->
+        <div id="deleteSingleModal" class="fixed inset-0 bg-slate-900/60 z-50 hidden flex items-center justify-center p-4">
+            <div class="bg-white w-full max-w-md rounded-2xl shadow-2xl overflow-hidden border border-rose-200">
+                <div class="bg-rose-600 text-white px-6 py-4 flex justify-between items-center">
+                    <h3 class="font-bold text-base flex items-center gap-2">
+                        <i class="fa-solid fa-triangle-exclamation"></i> ग्राहक रिकॉर्ड हटाने की पुष्टि
+                    </h3>
+                    <button onclick="closeDeleteSingleModal()" class="text-white hover:text-rose-200"><i class="fa-solid fa-xmark text-lg"></i></button>
+                </div>
+                
+                <div class="p-6 space-y-4">
+                    <input type="hidden" id="deleteTargetId" value="">
+                    <p class="text-xs text-slate-700 leading-relaxed">
+                        क्या आप निश्चित रूप से ग्राहक <span id="deleteTargetName" class="font-bold text-rose-700"></span> को सूची से हटाना चाहते हैं?
+                    </p>
+
+                    <div class="pt-2 flex justify-end gap-2">
+                        <button type="button" onclick="closeDeleteSingleModal()" class="px-4 py-2 border border-slate-300 rounded-lg text-xs font-bold text-slate-600 hover:bg-slate-100">रद्द करें</button>
+                        <button type="button" onclick="confirmDeleteSingleCustomer()" class="px-5 py-2 bg-rose-600 hover:bg-rose-700 text-white rounded-lg text-xs font-bold shadow flex items-center gap-1.5">
+                            <i class="fa-solid fa-trash-can"></i> हां, हटाएं (Delete)
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Modal 5: Bulk Delete Confirm -->
+        <div id="bulkDeleteModal" class="fixed inset-0 bg-slate-900/60 z-50 hidden flex items-center justify-center p-4">
+            <div class="bg-white w-full max-w-md rounded-2xl shadow-2xl overflow-hidden border border-rose-200">
+                <div class="bg-rose-700 text-white px-6 py-4 flex justify-between items-center">
+                    <h3 class="font-bold text-base flex items-center gap-2">
+                        <i class="fa-solid fa-trash-can"></i> चयनित ग्राहकों को हटाएं (Bulk Delete)
+                    </h3>
+                    <button onclick="closeBulkDeleteModal()" class="text-white hover:text-rose-200"><i class="fa-solid fa-xmark text-lg"></i></button>
+                </div>
+                
+                <div class="p-6 space-y-4">
+                    <p class="text-xs text-slate-700 leading-relaxed">
+                        क्या आप निश्चित रूप से चुने गए <span id="bulkDeleteCountText" class="font-bold text-rose-700">0</span> ग्राहकों को हटाना चाहते हैं?
+                    </p>
+
+                    <div class="pt-2 flex justify-end gap-2">
+                        <button type="button" onclick="closeBulkDeleteModal()" class="px-4 py-2 border border-slate-300 rounded-lg text-xs font-bold text-slate-600 hover:bg-slate-100">रद्द करें</button>
+                        <button type="button" onclick="confirmBulkDeleteCustomers()" class="px-5 py-2 bg-rose-700 hover:bg-rose-800 text-white rounded-lg text-xs font-bold shadow flex items-center gap-1.5">
+                            <i class="fa-solid fa-trash-can"></i> सभी चुने गए हटाएं
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <footer class="bg-cscNavy text-white py-4 border-t-2 border-cscSaffron no-print mt-auto text-xs">
+            <div class="max-w-7xl mx-auto px-4 text-center sm:flex sm:justify-between sm:items-center space-y-2 sm:space-y-0">
+                <div>
+                    <p class="font-bold text-slate-200 font-rozha">धनखड़ सीएससी सेंटर ढाकला (Dhankhar CSC Centre Dhakla)</p>
+                    <p class="text-slate-400 text-[11px]">CSC ID: 316521760018 | ऑपरेटर: आशीष धनखड़ (9996036806)</p>
+                </div>
+                <div class="text-slate-400 font-mono text-[11px]">
+                    &copy; 2026 CSC Digital India Loyalty Portal.
+                </div>
+            </div>
+        </footer>
+    </div>
+
+    <script>
+        // Admin Authentication Logic
+        const ADMIN_PASSWORD_HASH = "Pooja@1998";
+
+        function checkAdminSession() {
+            const isAuth = sessionStorage.getItem('csc_admin_authenticated');
+            if (isAuth === 'true') {
+                document.getElementById('adminLoginModal').classList.add('hidden');
+                document.getElementById('mainAppContainer').classList.remove('hidden');
+                document.getElementById('mainAppContainer').classList.add('flex');
+                initAppAfterLogin();
+            } else {
+                document.getElementById('adminLoginModal').classList.remove('hidden');
+                document.getElementById('mainAppContainer').classList.add('hidden');
+            }
+        }
+
+        function handleAdminLogin(e) {
+            e.preventDefault();
+            const pass = document.getElementById('adminPasswordInput').value;
+            const errBox = document.getElementById('loginErrorMsg');
+
+            if (pass === ADMIN_PASSWORD_HASH) {
+                sessionStorage.setItem('csc_admin_authenticated', 'true');
+                document.getElementById('adminLoginModal').classList.add('hidden');
+                document.getElementById('mainAppContainer').classList.remove('hidden');
+                document.getElementById('mainAppContainer').classList.add('flex');
+                initAppAfterLogin();
+            } else {
+                errBox.innerText = "❌ अमान्य पासवर्ड! कृपया सही पासवर्ड (Pooja@1998) दर्ज करें।";
+                errBox.classList.remove('hidden');
+                document.getElementById('adminPasswordInput').value = '';
+            }
+        }
+
+        function handleAdminLogout() {
+            sessionStorage.removeItem('csc_admin_authenticated');
+            location.reload();
+        }
+
+        // Google Sheets Integration Web App URL
+        const GOOGLE_SHEET_WEB_APP_URL = 'https://script.google.com/macros/s/AKfycbyo-kkIP5QaE2awdDgk5E5j5Mc7gEXXHrxpDQplYtfYI0aVF82VNx5XeLd-dakW7x8o/exec';
+
+        async function syncDataToGoogleSheet(customerData) {
+            try {
+                let response = await fetch(GOOGLE_SHEET_WEB_APP_URL, {
+                    method: 'POST',
+                    mode: 'no-cors',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(customerData)
+                });
+                console.log('✅ Data successfully synced to Google Drive Sheet!');
+            } catch (error) {
+                console.error('❌ Error syncing data to Google Sheet:', error);
+            }
+        }
+
+        // Tier Rules Configuration Matrix
+        const TIER_CONFIG = {
+            'Normal': {
+                monthsLimit: 3,
+                discountLabel: 'लकी स्पिन / अपग्रेड योग्य',
+                discountPercent: '0%',
+                nextTier: 'Silver',
+                prevTier: 'Normal',
+                titleHindi: 'विशेष ग्राहक वफादारी प्रमाण पत्र',
+                certClass: 'cert-border-Normal',
+                badgeClass: 'badge-Normal'
+            },
+            'Silver': {
+                monthsLimit: 5,
+                discountLabel: '२०% सीएससी शुल्क छूट (20% Off)',
+                discountPercent: '20%',
+                nextTier: 'Gold',
+                prevTier: 'Normal',
+                titleHindi: 'रजत ग्राहक वफादारी प्रमाण पत्र (Silver)',
+                certClass: 'cert-border-Silver',
+                badgeClass: 'badge-Silver'
+            },
+            'Gold': {
+                monthsLimit: 7,
+                discountLabel: '५०% सीएससी शुल्क छूट (50% Off)',
+                discountPercent: '50%',
+                nextTier: 'Platinum',
+                prevTier: 'Silver',
+                titleHindi: 'स्वर्ण ग्राहक वफादारी प्रमाण पत्र (Gold)',
+                certClass: 'cert-border-Gold',
+                badgeClass: 'badge-Gold'
+            },
+            'Platinum': {
+                monthsLimit: 9,
+                discountLabel: '९०% विशाल छूट (VIP 90% Off)',
+                discountPercent: '90%',
+                nextTier: 'Diamond',
+                prevTier: 'Gold',
+                titleHindi: 'प्लैटिनम ग्राहक वफादारी प्रमाण पत्र (Platinum)',
+                certClass: 'cert-border-Platinum',
+                badgeClass: 'badge-Platinum'
+            },
+            'Diamond': {
+                monthsLimit: 9999, // Permanent / Lifetime
+                discountLabel: '२५% आजीवन डिस्काउंट (Lifetime 25% Off)',
+                discountPercent: '25% Lifetime',
+                nextTier: 'Diamond',
+                prevTier: 'Diamond', // Never downgrades
+                titleHindi: 'स्थाई डायमंड वफादारी प्रमाण पत्र (Diamond Lifetime)',
+                certClass: 'cert-border-Diamond',
+                badgeClass: 'badge-Diamond'
+            }
+        };
+
+        // Default Sample Customers Pre-populated
+        const MOCK_CUSTOMERS = [
+            {
+                id: 'CSC-DH-1001',
+                name: 'सुरेश कुमार',
+                phone: '9812345678',
+                email: 'suresh@gmail.com',
+                regDate: '2026-08-01',
+                tier: 'Normal',
+                servicesCount: 9,
+                platinumCompletions: 0,
+                expiryDate: '2026-11-01',
+                history: [
+                    { date: '2026-08-05', service: 'आधार अपडेट', notes: 'फोन नंबर लिंक' }
+                ]
+            },
+            {
+                id: 'CSC-DH-1002',
+                name: 'सुनीता देवी',
+                phone: '9991122334',
+                email: 'sunita.dhakla@gmail.com',
+                regDate: '2026-05-10',
+                tier: 'Silver',
+                servicesCount: 4,
+                platinumCompletions: 0,
+                expiryDate: '2026-10-10',
+                history: [
+                    { date: '2026-05-15', service: 'पैन कार्ड नया', notes: 'आवेदन दर्ज' }
+                ]
+            },
+            {
+                id: 'CSC-DH-1003',
+                name: 'विकास शर्मा',
+                phone: '9416554433',
+                email: 'vikas.sharma@gmail.com',
+                regDate: '2026-01-10',
+                tier: 'Platinum',
+                servicesCount: 9,
+                platinumCompletions: 2,
+                expiryDate: '2026-11-10',
+                history: [
+                    { date: '2026-02-01', service: 'बैंकिंग / पेंशन', notes: 'KYC जमा' }
+                ]
+            },
+            {
+                id: 'CSC-DH-1004',
+                name: 'राजेश धनखड़',
+                phone: '9812009988',
+                email: 'rajesh.dhankhar@gmail.com',
+                regDate: '2025-06-15',
+                tier: 'Diamond',
+                servicesCount: 5,
+                platinumCompletions: 3,
+                expiryDate: '9999-12-31',
+                history: [
+                    { date: '2025-06-15', service: 'डायमंड लाइफटाइम ऑनबोर्डिंग', notes: 'आजीवन 25% छूट जारी' }
+                ]
+            }
+        ];
+
+        let customerRegistry = [];
+        let selectedCustomerIds = new Set();
+
+        window.onload = function() {
+            checkAdminSession();
+        };
+
+        function initAppAfterLogin() {
+            loadStateFromLocalStorage();
+            renderCustomerTable();
+            populateCertDropdown();
+            updateStatsCards();
+            initSpinWheel();
+        }
+
+        function saveStateToLocalStorage() {
+            localStorage.setItem('csc_dhakla_customers', JSON.stringify(customerRegistry));
+        }
+
+        function loadStateFromLocalStorage() {
+            const saved = localStorage.getItem('csc_dhakla_customers');
+            if (saved) {
+                try {
+                    customerRegistry = JSON.parse(saved);
+                } catch(e) {
+                    customerRegistry = JSON.parse(JSON.stringify(MOCK_CUSTOMERS));
+                }
+            } else {
+                customerRegistry = JSON.parse(JSON.stringify(MOCK_CUSTOMERS));
+                saveStateToLocalStorage();
+            }
+        }
+
+        function resetToMockData() {
+            if (confirm('क्या आप सचमुच सैंपल डेटा रीसेट करना चाहते हैं?')) {
+                customerRegistry = JSON.parse(JSON.stringify(MOCK_CUSTOMERS));
+                saveStateToLocalStorage();
+                filterCustomerRegistry();
+                populateCertDropdown();
+                alert('✅ सैंपल डेटा रिस्टोर कर दिया गया है।');
+            }
+        }
+
+        // Calculate Expiry Date Helper
+        function calcExpiryDate(startDateStr, tier) {
+            if (tier === 'Diamond') return '9999-12-31';
+            const d = new Date(startDateStr);
+            const addMonths = TIER_CONFIG[tier].monthsLimit;
+            d.setMonth(d.getMonth() + addMonths);
+            return d.toISOString().split('T')[0];
+        }
+
+        // Extend Date by 30 Days Helper
+        function add30DaysToDate(dateStr) {
+            const d = new Date(dateStr);
+            d.setDate(d.getDate() + 30);
+            return d.toISOString().split('T')[0];
+        }
+
+        function formatDate(dateStr) {
+            if (!dateStr) return '-';
+            if (dateStr.startsWith('9999')) return 'आजीवन (Lifetime)';
+            const p = dateStr.split('-');
+            return p.length === 3 ? `${p[2]}/${p[1]}/${p[0]}` : dateStr;
+        }
+
+        function renderCustomerTable(data = customerRegistry) {
+            const tbody = document.getElementById('customerTableBody');
+            tbody.innerHTML = '';
+
+            const today = new Date().toISOString().split('T')[0];
+
+            if (data.length === 0) {
+                tbody.innerHTML = `
+                    <tr>
+                        <td colspan="9" class="p-8 text-center text-slate-500 bg-slate-50">
+                            <i class="fa-solid fa-users-slash text-3xl mb-2 text-slate-300 block"></i>
+                            कोई ग्राहक रिकॉर्ड नहीं मिला।
+                        </td>
+                    </tr>
+                `;
+                updateBulkControls();
+                updateStatsCards();
+                return;
+            }
+
+            data.forEach((cust) => {
+                const isDiamond = cust.tier === 'Diamond';
+                const isExp = !isDiamond && cust.expiryDate < today && cust.servicesCount < 10;
+                const isChecked = selectedCustomerIds.has(cust.id);
+
+                const tr = document.createElement('tr');
+                tr.className = `hover:bg-slate-50 transition text-xs ${isExp ? 'bg-rose-50/50' : ''} ${isDiamond ? 'bg-sky-50/40' : ''} ${isChecked ? 'bg-amber-50/40' : ''}`;
+
+                tr.innerHTML = `
+                    <td class="p-3 text-center">
+                        <input type="checkbox" value="${cust.id}" ${isChecked ? 'checked' : ''} onchange="toggleCustomerCheck('${cust.id}', this.checked)" class="w-4 h-4 text-cscNavy rounded focus:ring-cscNavy cursor-pointer">
+                    </td>
+                    <td class="p-3">
+                        <div class="font-bold text-cscNavy text-sm font-rozha">${cust.name}</div>
+                        <div class="text-[10px] text-slate-500 font-mono">ID: ${cust.id}</div>
+                    </td>
+                    <td class="p-3">
+                        <div class="font-mono">${cust.phone}</div>
+                        <div class="text-[10px] text-slate-400">${cust.email || 'N/A'}</div>
+                    </td>
+                    <td class="p-3">
+                        <span class="px-2.5 py-1 rounded-full text-[10px] font-bold ${
+                            cust.tier === 'Diamond' ? 'bg-sky-200 text-sky-900 border border-sky-400 shadow-sm' :
+                            cust.tier === 'Platinum' ? 'bg-sky-100 text-sky-800 border border-sky-300' :
+                            cust.tier === 'Gold' ? 'bg-amber-100 text-amber-800 border border-amber-300' :
+                            cust.tier === 'Silver' ? 'bg-slate-200 text-slate-800 border border-slate-300' :
+                            'bg-emerald-100 text-emerald-800 border border-emerald-300'
+                        }">
+                            ${cust.tier} Card
+                        </span>
+                        ${cust.tier === 'Platinum' ? `<div class="text-[9px] text-slate-500 font-mono mt-0.5">साइकिल: ${cust.platinumCompletions || 0}/3</div>` : ''}
+                    </td>
+                    <td class="p-3">
+                        <div class="flex items-center gap-2">
+                            <div class="w-20 bg-slate-200 rounded-full h-2 overflow-hidden">
+                                <div class="bg-emerald-600 h-2 rounded-full" style="width: ${(cust.servicesCount / 10) * 100}%"></div>
+                            </div>
+                            <span class="font-bold font-mono text-slate-800">${cust.servicesCount}/10</span>
+                        </div>
+                    </td>
+                    <td class="p-3 font-bold text-cscNavy">${TIER_CONFIG[cust.tier].discountPercent}</td>
+                    <td class="p-3">
+                        <div class="font-mono text-slate-700">${formatDate(cust.expiryDate)}</div>
+                        ${isDiamond ? 
+                            `<span class="text-[9px] font-bold text-sky-800 bg-sky-100 px-1.5 py-0.5 rounded">आजीवन (No Expiry)</span>` :
+                            isExp ? 
+                            `<span class="text-[9px] font-bold text-rose-600 bg-rose-100 px-1.5 py-0.5 rounded">समय समाप्त (Expired)</span>` : 
+                            `<span class="text-[9px] text-emerald-700">सक्रिय</span>`
+                        }
+                    </td>
+                    <td class="p-3 text-center">
+                        <button onclick="openLogServiceModal('${cust.id}')" class="bg-emerald-700 hover:bg-emerald-800 text-white px-3 py-1.5 rounded-lg font-bold text-[11px] shadow transition flex items-center gap-1 mx-auto">
+                            <i class="fa-solid fa-plus"></i> +1 सेवा
+                        </button>
+                    </td>
+                    <td class="p-3 text-center space-x-1">
+                        <button onclick="openCustomerCertView('${cust.id}')" title="प्रमाण पत्र देखें" class="bg-cscNavy hover:bg-slate-800 text-white p-1.5 rounded text-[11px]">
+                            <i class="fa-solid fa-certificate"></i>
+                        </button>
+                        <button onclick="openHistoryModal('${cust.id}')" title="सेवा इतिहास" class="bg-slate-600 hover:bg-slate-700 text-white p-1.5 rounded text-[11px]">
+                            <i class="fa-solid fa-clock-rotate-left"></i>
+                        </button>
+                        ${isExp ? `
+                            <button onclick="downgradeCustomerManual('${cust.id}')" title="ऑटो-डाउनग्रेड करें" class="bg-amber-600 hover:bg-amber-700 text-white p-1.5 rounded text-[11px]">
+                                <i class="fa-solid fa-arrow-down text-white"></i>
+                            </button>
+                        ` : ''}
+                        <button onclick="openDeleteSingleModal('${cust.id}')" title="हटाएं" class="bg-rose-600 hover:bg-rose-700 text-white p-1.5 rounded text-[11px]">
+                            <i class="fa-solid fa-trash-can"></i>
+                        </button>
+                    </td>
+                `;
+                tbody.appendChild(tr);
+            });
+
+            updateBulkControls();
+            updateStatsCards();
+        }
+
+        function filterCustomerRegistry() {
+            const query = document.getElementById('searchInput').value.toLowerCase();
+            const tier = document.getElementById('filterTier').value;
+            const status = document.getElementById('filterStatus').value;
+            const today = new Date().toISOString().split('T')[0];
+
+            const filtered = customerRegistry.filter(c => {
+                const matchesQ = c.name.toLowerCase().includes(query) || c.phone.includes(query) || c.id.toLowerCase().includes(query);
+                const matchesT = (tier === 'ALL') || (c.tier === tier);
+                const isDiamond = c.tier === 'Diamond';
+                const isExp = !isDiamond && c.expiryDate < today && c.servicesCount < 10;
+                const matchesS = (status === 'ALL') || (status === 'ACTIVE' && !isExp) || (status === 'EXPIRED' && isExp);
+                return matchesQ && matchesT && matchesS;
+            });
+
+            renderCustomerTable(filtered);
+        }
+
+        function toggleCustomerCheck(custId, isChecked) {
+            if (isChecked) selectedCustomerIds.add(custId);
+            else selectedCustomerIds.delete(custId);
+            updateBulkControls();
+        }
+
+        function toggleSelectAllCustomers(masterCb) {
+            const visibleCbs = document.querySelectorAll('#customerTableBody input[type="checkbox"]');
+            visibleCbs.forEach(cb => {
+                cb.checked = masterCb.checked;
+                if (masterCb.checked) selectedCustomerIds.add(cb.value);
+                else selectedCustomerIds.delete(cb.value);
+            });
+            updateBulkControls();
+        }
+
+        function updateBulkControls() {
+            const btn = document.getElementById('btnBulkDelete');
+            const badge = document.getElementById('selectedBadge');
+            const count = selectedCustomerIds.size;
+            badge.innerText = `${count} चयनित`;
+
+            if (count > 0) btn.removeAttribute('disabled');
+            else btn.setAttribute('disabled', 'true');
+        }
+
+        function openDeleteSingleModal(custId) {
+            const cust = customerRegistry.find(c => c.id === custId);
+            if (!cust) return;
+            document.getElementById('deleteTargetId').value = cust.id;
+            document.getElementById('deleteTargetName').innerText = cust.name;
+            document.getElementById('deleteSingleModal').classList.remove('hidden');
+        }
+
+        function closeDeleteSingleModal() {
+            document.getElementById('deleteSingleModal').classList.add('hidden');
+        }
+
+        function confirmDeleteSingleCustomer() {
+            const custId = document.getElementById('deleteTargetId').value;
+            customerRegistry = customerRegistry.filter(c => c.id !== custId);
+            selectedCustomerIds.delete(custId);
+            saveStateToLocalStorage();
+
+            closeDeleteSingleModal();
+            filterCustomerRegistry();
+            populateCertDropdown();
+            alert('✅ ग्राहक रिकॉर्ड सफलतापूर्वक हटा दिया गया है।');
+        }
+
+        function openBulkDeleteModal() {
+            if (selectedCustomerIds.size === 0) return;
+            document.getElementById('bulkDeleteCountText').innerText = selectedCustomerIds.size;
+            document.getElementById('bulkDeleteModal').classList.remove('hidden');
+        }
+
+        function closeBulkDeleteModal() {
+            document.getElementById('bulkDeleteModal').classList.add('hidden');
+        }
+
+        function confirmBulkDeleteCustomers() {
+            customerRegistry = customerRegistry.filter(c => !selectedCustomerIds.has(c.id));
+            const count = selectedCustomerIds.size;
+            selectedCustomerIds.clear();
+            saveStateToLocalStorage();
+
+            closeBulkDeleteModal();
+            filterCustomerRegistry();
+            populateCertDropdown();
+            alert(`✅ ${count} ग्राहक रिकॉर्ड हटा दिए गए हैं।`);
+        }
+
+        function openAddCustomerModal() {
+            document.getElementById('addName').value = '';
+            document.getElementById('addPhone').value = '';
+            document.getElementById('addEmail').value = '';
+            document.getElementById('addDate').value = new Date().toISOString().split('T')[0];
+            document.getElementById('addTier').value = 'Normal';
+            document.getElementById('addCustomerModal').classList.remove('hidden');
+        }
+
+        function closeAddCustomerModal() {
+            document.getElementById('addCustomerModal').classList.add('hidden');
+        }
+
+        function handleAddCustomerSubmit(e) {
+            e.preventDefault();
+            const name = document.getElementById('addName').value;
+            const phone = document.getElementById('addPhone').value;
+            const email = document.getElementById('addEmail').value;
+            const regDate = document.getElementById('addDate').value;
+            const tier = document.getElementById('addTier').value;
+
+            const newId = `CSC-DH-${1000 + customerRegistry.length + 1}`;
+            const expiry = calcExpiryDate(regDate, tier);
+
+            const newCust = {
+                id: newId,
+                name: name,
+                phone: phone,
+                email: email,
+                regDate: regDate,
+                tier: tier,
+                servicesCount: 0,
+                platinumCompletions: 0,
+                expiryDate: expiry,
+                history: [{ date: regDate, service: 'नया पंजीकरण', notes: 'कार्ड जारी किया गया' }]
+            };
+
+            customerRegistry.unshift(newCust);
+            saveStateToLocalStorage();
+
+            // Sync with Google Sheets
+            syncDataToGoogleSheet(newCust);
+
+            closeAddCustomerModal();
+            filterCustomerRegistry();
+            populateCertDropdown();
+            alert(`🎉 नया ग्राहक पंजीकृत किया गया: ${name} (ID: ${newId})`);
+        }
+
+        function openLogServiceModal(custId) {
+            const cust = customerRegistry.find(c => c.id === custId);
+            if (!cust) return;
+
+            document.getElementById('logTargetCustId').value = cust.id;
+            document.getElementById('logCustNameDisplay').innerText = cust.name;
+            document.getElementById('logCustTierDisplay').innerText = cust.tier;
+            document.getElementById('logCustCountDisplay').innerText = cust.servicesCount;
+
+            document.getElementById('serviceLogModal').classList.remove('hidden');
+        }
+
+        function closeServiceLogModal() {
+            document.getElementById('serviceLogModal').classList.add('hidden');
+        }
+
+        function handleLogServiceSubmit(e) {
+            e.preventDefault();
+            const custId = document.getElementById('logTargetCustId').value;
+            const serviceType = document.getElementById('logServiceType').value;
+            const notes = document.getElementById('logServiceNotes').value || 'सेवा पूर्ण की गई';
+
+            const cust = customerRegistry.find(c => c.id === custId);
+            if (!cust) return;
+
+            const today = new Date().toISOString().split('T')[0];
+            cust.history.unshift({ date: today, service: serviceType, notes: notes });
+            cust.servicesCount += 1;
+
+            closeServiceLogModal();
+
+            // Auto Upgrade Check Rule
+            if (cust.servicesCount >= 10) {
+                processAutoUpgrade(cust);
+            } else {
+                saveStateToLocalStorage();
+                renderCustomerTable();
+            }
+
+            // Sync update to Google Sheets
+            syncDataToGoogleSheet(cust);
+        }
+
+        function processAutoUpgrade(cust) {
+            const currentTier = cust.tier;
+
+            if (currentTier === 'Diamond') {
+                confetti({ particleCount: 100, spread: 70, origin: { y: 0.6 } });
+                alert(`💎 ${cust.name} एक स्थाई Diamond Certificate धारक हैं! 10 सेवाएं पूर्ण होने पर आपका जीवनभर 25% डिस्काउंट निरंतर लागू रहेगा।`);
+                cust.servicesCount = 0;
+            } 
+            else if (currentTier === 'Platinum') {
+                cust.platinumCompletions = (cust.platinumCompletions || 0) + 1;
+
+                if (cust.platinumCompletions >= 3) {
+                    cust.tier = 'Diamond';
+                    cust.servicesCount = 0;
+                    cust.expiryDate = '9999-12-31';
+
+                    confetti({ particleCount: 200, spread: 100, origin: { y: 0.5 } });
+                    alert(`👑 ऐतिहासिक उपलब्धि! ${cust.name} ने Platinum 10 सेवाओं की साइकिल 3 बार पूर्ण कर ली है!\n\nग्राहकों को 'आजीवन स्थाई डायमंड वफादारी प्रमाण पत्र (Permanent Diamond Certificate)' प्रदान किया गया है!\n\n✨ जीवनभर सीएससी शुल्क पर 25% की स्थाई छूट मिलेगी!`);
+                } else {
+                    cust.servicesCount = 0;
+                    cust.expiryDate = add30DaysToDate(cust.expiryDate);
+
+                    confetti({ particleCount: 120, spread: 80, origin: { y: 0.6 } });
+                    alert(`🎉 ${cust.name} ने Platinum Card पर 10 सेवाएं (${cust.platinumCompletions}/3 बार) पूर्ण कर ली हैं!\n\nकार्ड की वैधता 30 दिन बढ़ा दी गई है! (नया मियाद: ${formatDate(cust.expiryDate)})`);
+                }
+            } 
+            else {
+                const nextTier = TIER_CONFIG[currentTier].nextTier;
+                cust.tier = nextTier;
+                cust.servicesCount = 0;
+                const today = new Date().toISOString().split('T')[0];
+                cust.expiryDate = calcExpiryDate(today, nextTier);
+
+                confetti({ particleCount: 120, spread: 80, origin: { y: 0.6 } });
+                alert(`🎉 10 सेवाएं पूर्ण! ${cust.name} का कार्ड '${currentTier}' से '${nextTier}' (${TIER_CONFIG[nextTier].discountPercent} Off) में अपग्रेड हो गया है!`);
+            }
+
+            saveStateToLocalStorage();
+            renderCustomerTable();
+            populateCertDropdown();
+        }
+
+        function runAuditAndDowngradeCheck() {
+            const today = new Date().toISOString().split('T')[0];
+            let downgradedCount = 0;
+
+            customerRegistry.forEach(cust => {
+                if (cust.tier !== 'Diamond' && cust.expiryDate < today && cust.servicesCount < 10) {
+                    if (cust.tier !== 'Normal') {
+                        cust.tier = TIER_CONFIG[cust.tier].prevTier;
+                        cust.servicesCount = 0;
+                        cust.expiryDate = calcExpiryDate(today, cust.tier);
+                        downgradedCount++;
+                    }
+                }
+            });
+
+            saveStateToLocalStorage();
+            renderCustomerTable();
+            populateCertDropdown();
+
+            if (downgradedCount > 0) {
+                alert(`⚠️ ऑडिट पूर्ण: ${downgradedCount} ग्राहकों की समय-सीमा समाप्त होने पर कार्ड स्वतः डाउनग्रेड कर दिया गया।`);
+            } else {
+                alert(`✅ ऑडिट पूर्ण: कोई भी कार्ड डाउनग्रेड योग्य नहीं पाया गया।`);
+            }
+        }
+
+        function downgradeCustomerManual(custId) {
+            const cust = customerRegistry.find(c => c.id === custId);
+            if (!cust) return;
+            if (cust.tier === 'Diamond') {
+                alert('💎 डायमंड कार्ड आजीवन स्थाई होता है, इसे डाउनग्रेड नहीं किया जा सकता!');
+                return;
+            }
+
+            const prev = TIER_CONFIG[cust.tier].prevTier;
+            cust.tier = prev;
+            cust.servicesCount = 0;
+            const today = new Date().toISOString().split('T')[0];
+            cust.expiryDate = calcExpiryDate(today, prev);
+
+            saveStateToLocalStorage();
+            renderCustomerTable();
+            populateCertDropdown();
+            alert(`🔻 ${cust.name} का कार्ड डाउनग्रेड होकर '${prev}' श्रेणी हो गया है।`);
+        }
+
+        function openHistoryModal(custId) {
+            const cust = customerRegistry.find(c => c.id === custId);
+            if (!cust) return;
+
+            document.getElementById('histCustName').innerText = cust.name;
+            document.getElementById('histCustPhone').innerText = `फोन: ${cust.phone} | ID: ${cust.id}`;
+            document.getElementById('histCustBadge').innerHTML = `<span class="px-2 py-0.5 rounded font-bold text-xs bg-cscNavy text-white">${cust.tier} Card</span>`;
+
+            const tbody = document.getElementById('historyTableBody');
+            tbody.innerHTML = '';
+
+            cust.history.forEach(h => {
+                const tr = document.createElement('tr');
+                tr.innerHTML = `
+                    <td class="p-2 font-mono">${formatDate(h.date)}</td>
+                    <td class="p-2 font-bold text-cscNavy">${h.service}</td>
+                    <td class="p-2 text-slate-500">${h.notes}</td>
+                `;
+                tbody.appendChild(tr);
+            });
+
+            document.getElementById('historyModal').classList.remove('hidden');
+        }
+
+        function closeHistoryModal() {
+            document.getElementById('historyModal').classList.add('hidden');
+        }
+
+        function populateCertDropdown() {
+            const sel = document.getElementById('certCustomerSelect');
+            sel.innerHTML = '';
+
+            customerRegistry.forEach(c => {
+                const opt = document.createElement('option');
+                opt.value = c.id;
+                opt.innerText = `${c.name} (${c.phone}) - [${c.tier} Card]`;
+                sel.appendChild(opt);
+            });
+
+            if (customerRegistry.length > 0) {
+                loadCustomerIntoCertificate();
+            }
+        }
+
+        function openCustomerCertView(custId) {
+            switchTab('certificate');
+            document.getElementById('certCustomerSelect').value = custId;
+            loadCustomerIntoCertificate();
+        }
+
+        function loadCustomerIntoCertificate() {
+            const custId = document.getElementById('certCustomerSelect').value;
+            const cust = customerRegistry.find(c => c.id === custId);
+            if (!cust) return;
+
+            const rule = TIER_CONFIG[cust.tier];
+
+            document.getElementById('previewCustName').innerText = cust.name;
+            document.getElementById('previewCustId').innerText = cust.id;
+            document.getElementById('previewCustPhone').innerText = cust.phone;
+            document.getElementById('previewCustTier').innerText = cust.tier;
+            document.getElementById('previewCustServices').innerText = `${cust.servicesCount} / 10`;
+            document.getElementById('previewCustExpiry').innerText = formatDate(cust.expiryDate);
+
+            document.getElementById('certCustomerName').innerText = cust.name;
+            document.getElementById('certCodeDisplay').innerText = cust.id;
+            document.getElementById('badgeTierText').innerText = `${cust.tier.toUpperCase()} TIER`;
+            document.getElementById('certTitleText').innerText = rule.titleHindi;
+            document.getElementById('certTierHighlight').innerText = `${cust.tier} Loyalty Certificate`;
+            document.getElementById('certDiscountValue').innerText = rule.discountLabel;
+            document.getElementById('certValidityText').innerText = formatDate(cust.expiryDate);
+            document.getElementById('certRegDate').innerText = formatDate(cust.regDate);
+            document.getElementById('certServicesCount').innerText = `${cust.servicesCount} / 10`;
+
+            document.getElementById('certBorderBox').className = `${rule.certClass} p-6 relative flex flex-col justify-between min-h-[540px] transition-all duration-300`;
+            document.getElementById('certTierBadge').className = `${rule.badgeClass} px-4 py-1.5 rounded-full text-xs font-black uppercase tracking-widest flex items-center gap-1.5 shadow`;
+        }
+
+        function downloadCertificateImage() {
+            const element = document.getElementById('printableCertificateContainer');
+            const name = document.getElementById('previewCustName').innerText;
+
+            html2canvas(element, { scale: 2, useCORS: true }).then(canvas => {
+                const a = document.createElement('a');
+                a.download = `CSC_Loyalty_Certificate_${name}.png`;
+                a.href = canvas.toDataURL('image/png');
+                a.click();
+            });
+        }
+
+        // Lucky Spin Wheel Engine
+        const rewards = ['50% सीएससी शुल्क छूट', 'मुफ्त लैमिनेशन', '20% सीएससी शुल्क छूट', '₹50 कैशबैक', 'अगली सेवा मुफ्त', 'सिल्वर कार्ड अपग्रेड'];
+        const wheelColors = ['#0A2540', '#FF9933', '#00875A', '#B45309', '#0369A1', '#475569'];
+        let isSpinning = false;
+
+        function initSpinWheel() {
+            const canvas = document.getElementById('wheelCanvas');
+            if (!canvas || !canvas.getContext) return;
+            const ctx = canvas.getContext('2d');
+            const numOptions = rewards.length;
+            const arcSize = (2 * Math.PI) / numOptions;
+
+            ctx.clearRect(0, 0, 300, 300);
+
+            for (let i = 0; i < numOptions; i++) {
+                const angle = i * arcSize;
+                ctx.fillStyle = wheelColors[i % wheelColors.length];
+
+                ctx.beginPath();
+                ctx.arc(150, 150, 130, angle, angle + arcSize, false);
+                ctx.arc(150, 150, 30, angle + arcSize, angle, true);
+                ctx.fill();
+                ctx.stroke();
+
+                ctx.save();
+                ctx.fillStyle = "#ffffff";
+                ctx.font = 'bold 11px Hind, sans-serif';
+                ctx.translate(150 + Math.cos(angle + arcSize / 2) * 85, 150 + Math.sin(angle + arcSize / 2) * 85);
+                ctx.rotate(angle + arcSize / 2 + Math.PI / 2);
+                const text = rewards[i];
+                ctx.fillText(text, -ctx.measureText(text).width / 2, 0);
+                ctx.restore();
+            }
+        }
+
+        function spinWheelAction() {
+            if (isSpinning) return;
+            isSpinning = true;
+
+            const deg = Math.floor(3600 + Math.random() * 360);
+            const canvas = document.getElementById('wheelCanvas');
+            canvas.style.transform = `rotate(${deg}deg)`;
+
+            setTimeout(() => {
+                isSpinning = false;
+                const actualDeg = deg % 360;
+                const index = Math.floor((360 - actualDeg) / (360 / rewards.length)) % rewards.length;
+                
+                const win = rewards[index];
+                document.getElementById('spinRewardName').innerText = win;
+                document.getElementById('spinRewardBox').classList.remove('hidden');
+
+                confetti({ particleCount: 100, spread: 70, origin: { y: 0.6 } });
+            }, 4000);
+        }
+
+        function switchTab(tabId) {
+            document.querySelectorAll('.tab-content').forEach(el => el.classList.add('hidden'));
+            document.querySelectorAll('.tab-btn').forEach(btn => {
+                btn.classList.remove('active', 'text-cscNavy', 'border-cscSaffron', 'border-b-2', 'font-bold');
+                btn.classList.add('text-slate-500');
+            });
+
+            document.getElementById(`view-${tabId}`).classList.remove('hidden');
+            const targetBtn = document.getElementById(`tab-${tabId}`);
+            targetBtn.classList.add('active', 'text-cscNavy', 'border-cscSaffron', 'border-b-2', 'font-bold');
+            targetBtn.classList.remove('text-slate-500');
+        }
+
+        function updateStatsCards() {
+            document.getElementById('statTotal').innerText = customerRegistry.length;
+            document.getElementById('statNormal').innerText = customerRegistry.filter(c => c.tier === 'Normal').length;
+            document.getElementById('statSilver').innerText = customerRegistry.filter(c => c.tier === 'Silver').length;
+            document.getElementById('statGold').innerText = customerRegistry.filter(c => c.tier === 'Gold').length;
+            document.getElementById('statPlatinum').innerText = customerRegistry.filter(c => c.tier === 'Platinum').length;
+            document.getElementById('statDiamond').innerText = customerRegistry.filter(c => c.tier === 'Diamond').length;
+        }
+    </script>
+</body>
+</html>
